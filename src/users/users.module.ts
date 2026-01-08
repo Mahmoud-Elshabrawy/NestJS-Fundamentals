@@ -19,12 +19,26 @@ class UserHappitsFactory {
     }
 }
 
+@Injectable()
+class DbConnection {
+    async connectToDB(): Promise<string> {
+        return Promise.resolve('Connected To DB Successfully')
+    }
+}
+
+@Injectable()
+class InjectionScopes {
+    constructor(private readonly userService2: UserService) { }
+}
+
 @Module({
     controllers: [UsersController],
     providers: [
         // standrd provider
         UserService,
         UserHappitsFactory,
+        DbConnection,
+        InjectionScopes,
 
         // value provider (Mock)
         {
@@ -39,8 +53,13 @@ class UserHappitsFactory {
         // factory provider
         {
             provide: 'USER_HAPPITS',
-            useFactory: (userHappits: UserHappitsFactory) => userHappits.getHabbits(),
-            inject: [UserHappitsFactory],
+            useFactory: async (userHappits: UserHappitsFactory, dbConnection: DbConnection) => {
+                // connect to db
+                const db = await dbConnection.connectToDB()
+                console.log(db);
+                return userHappits.getHabbits()
+            },
+            inject: [UserHappitsFactory, DbConnection],
         },
     ]
 })
