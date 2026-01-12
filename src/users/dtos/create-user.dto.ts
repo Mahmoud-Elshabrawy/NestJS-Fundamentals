@@ -9,5 +9,9 @@ export class CreateUserDto {
     email: string
 
     @IsString()
+    password: string
+
+
+    @IsString()
     country: string
 }

@@ -3,17 +3,20 @@ import { CreateUserDto } from "./dtos/create-user.dto";
 import { UpdateUserDto } from "./dtos/update-user.dto";
 import { UserEntity } from "./user.entity";
 import { UserService } from "./users.service";
+import { UserResponseDto } from "./dtos/user-response.dto";
+import { resolve } from "path";
 
 @Controller('users')
 export class UsersController {
     constructor(private readonly userservice: UserService) { }
     @Get()
-    find(): UserEntity[] {
+    async find(): Promise<UserEntity[]> {
+        await new Promise((resolve) => setTimeout(resolve, 6000))
         return this.userservice.findAll()
     }
 
     @Get(':id')
-    findOne(@Param('id', ParseUUIDPipe) id: string): UserEntity | undefined {
+    findOne(@Param('id', ParseUUIDPipe) id: string): UserResponseDto {
         return this.userservice.findOne(id)
     }
 

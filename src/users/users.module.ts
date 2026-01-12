@@ -22,7 +22,7 @@ class UserHappitsFactory {
 @Injectable()
 class DbConnection {
     async connectToDB(): Promise<string> {
-        return Promise.resolve('Connected To DB Successfully')
+        return Promise.resolve('')
     }
 }
 
@@ -38,7 +38,7 @@ class InjectionScopes {
         UserService,
         UserHappitsFactory,
         DbConnection,
-        InjectionScopes,
+        // InjectionScopes,
 
         // value provider (Mock)
         {

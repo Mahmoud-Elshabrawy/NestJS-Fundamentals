@@ -3,31 +3,36 @@ import { CreateUserDto } from "./dtos/create-user.dto";
 import { UpdateUserDto } from "./dtos/update-user.dto";
 import { UserEntity } from "./user.entity";
 import { v4 as uuid } from 'uuid'
+import { UserResponseDto } from "./dtos/user-response.dto";
 
 @Injectable({ scope: Scope.DEFAULT })
 export class UserService {
     constructor(@Inject('App-Name') private readonly appName: string,
         @Inject('USER_HAPPITS') private readonly userHappits: string) {
-        console.log('UserService Initiated');
+        // console.log('UserService Initiated');
 
     }
     private users: UserEntity[] = []
 
     findAll(): UserEntity[] {
-        console.log(this.appName);
-        console.log(this.userHappits);
+        // console.log(this.appName);
+        // console.log(this.userHappits);
 
         return this.users
     }
 
-    findOne(id: string): UserEntity | undefined {
-        return this.users.find(user => user.id === id)
+    findOne(id: string): UserResponseDto {
+        const user = this.users.find(user => user.id === id)
+        if (!user) {
+            throw new NotFoundException(`User with id ${id} not found`)
+        }
+        return new UserResponseDto(user)
     }
 
-    createUser(createUserDto: CreateUserDto): UserEntity {
+    createUser(createUserDto: CreateUserDto): UserResponseDto {
         const newUser: UserEntity = { ...createUserDto, id: uuid() }
         this.users.push(newUser)
-        return newUser
+        return new UserResponseDto(newUser)
     }
 
     updateUser(id: string, updateUserDto: UpdateUserDto): UserEntity {
