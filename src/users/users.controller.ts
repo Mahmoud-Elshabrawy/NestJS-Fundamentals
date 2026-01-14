@@ -1,17 +1,19 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, ParseUUIDPipe, Patch, Post } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, Param, ParseUUIDPipe, Patch, Post, UseFilters } from "@nestjs/common";
 import { CreateUserDto } from "./dtos/create-user.dto";
 import { UpdateUserDto } from "./dtos/update-user.dto";
 import { UserEntity } from "./user.entity";
 import { UserService } from "./users.service";
 import { UserResponseDto } from "./dtos/user-response.dto";
-import { resolve } from "path";
+import { CustomExceptionFilter } from "src/common/filters/custom-exception.filter";
 
+
+//@UseFilters(CustomExceptionFilter)  use it only in user controller
 @Controller('users')
 export class UsersController {
     constructor(private readonly userservice: UserService) { }
     @Get()
     async find(): Promise<UserEntity[]> {
-        await new Promise((resolve) => setTimeout(resolve, 6000))
+        // await new Promise((resolve) => setTimeout(resolve, 6000))
         return this.userservice.findAll()
     }
 

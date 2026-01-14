@@ -4,6 +4,7 @@ import { UpdateUserDto } from "./dtos/update-user.dto";
 import { UserEntity } from "./user.entity";
 import { v4 as uuid } from 'uuid'
 import { UserResponseDto } from "./dtos/user-response.dto";
+import { CustomHttpExcetpion } from "src/common/exceptions/custom-http.exception";
 
 @Injectable({ scope: Scope.DEFAULT })
 export class UserService {
@@ -25,6 +26,8 @@ export class UserService {
         const user = this.users.find(user => user.id === id)
         if (!user) {
             throw new NotFoundException(`User with id ${id} not found`)
+            // throw new CustomHttpExcetpion(`user with this id: ${id} not found (Custom Exception)`, 404)
+
         }
         return new UserResponseDto(user)
     }
