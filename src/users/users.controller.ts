@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, ParseUUIDPipe, Patch, Post, UseFilters } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, Param, ParseUUIDPipe, Patch, Post, UseFilters, UseGuards } from "@nestjs/common";
 import { CreateUserDto } from "./dtos/create-user.dto";
 import { UpdateUserDto } from "./dtos/update-user.dto";
 import { UserEntity } from "./user.entity";
 import { UserService } from "./users.service";
 import { UserResponseDto } from "./dtos/user-response.dto";
 import { CustomExceptionFilter } from "src/common/filters/custom-exception.filter";
+import { AuthGuard } from "src/common/guards/auth.guard";
 
 
 //@UseFilters(CustomExceptionFilter)  use it only in user controller
@@ -28,6 +29,7 @@ export class UsersController {
         return this.userservice.createUser(createUserDto)
     }
 
+    @UseGuards(AuthGuard)
     @Patch(":id")
     update(@Param('id', ParseUUIDPipe) id: string, @Body() updateUserDto: UpdateUserDto): UserEntity {
         return this.userservice.updateUser(id, updateUserDto)
