@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, Param, ParseUUIDPipe, Patch, Post, UseFilters, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, Param, ParseUUIDPipe, Patch, Post, SetMetadata, UseFilters, UseGuards } from "@nestjs/common";
 import { CreateUserDto } from "./dtos/create-user.dto";
 import { UpdateUserDto } from "./dtos/update-user.dto";
 import { UserEntity } from "./user.entity";
@@ -6,6 +6,7 @@ import { UserService } from "./users.service";
 import { UserResponseDto } from "./dtos/user-response.dto";
 import { CustomExceptionFilter } from "src/common/filters/custom-exception.filter";
 import { AuthGuard } from "src/common/guards/auth.guard";
+import { Public } from "src/common/decorators/public.decorator";
 
 
 //@UseFilters(CustomExceptionFilter)  use it only in user controller
@@ -13,6 +14,8 @@ import { AuthGuard } from "src/common/guards/auth.guard";
 export class UsersController {
     constructor(private readonly userservice: UserService) { }
     @Get()
+    // @SetMetadata('IS_PUBLIC', true)
+    @Public()
     async find(): Promise<UserEntity[]> {
         // await new Promise((resolve) => setTimeout(resolve, 6000))
         return this.userservice.findAll()
@@ -29,7 +32,7 @@ export class UsersController {
         return this.userservice.createUser(createUserDto)
     }
 
-    @UseGuards(AuthGuard)
+    // @UseGuards(AuthGuard)
     @Patch(":id")
     update(@Param('id', ParseUUIDPipe) id: string, @Body() updateUserDto: UpdateUserDto): UserEntity {
         return this.userservice.updateUser(id, updateUserDto)

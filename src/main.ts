@@ -12,7 +12,7 @@ async function bootstrap() {
   // Global Blocks
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
   app.useGlobalInterceptors(new WrapDataInterceptor(), new TimeoutInterceptor())
-  app.useGlobalFilters(new CustomExceptionFilter())
+  // app.useGlobalFilters(new CustomExceptionFilter())
   // app.useGlobalGuards(new AuthGuard())
   await app.listen(process.env.PORT ?? 3000);
 }
