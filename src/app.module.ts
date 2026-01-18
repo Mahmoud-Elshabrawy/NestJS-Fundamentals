@@ -3,10 +3,23 @@ import { UserModule } from "./users/users.module";
 import { CommonModule } from './common/common.module';
 import { LoggerMiddleware } from "./common/middlewares/logger.middleware";
 import { UsersController } from "./users/users.controller";
+import { ConfigModule } from "@nestjs/config";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import ormConfig from "./config/orm.config";
 
 
 @Module({
-    imports: [UserModule, CommonModule],
+    imports: [ConfigModule.forRoot({
+        envFilePath: process.env.NODE_ENV === 'development'
+            ? '.development.env'
+            : '.staging.env',
+
+        isGlobal: true
+
+    }),
+        // TypeOrmModule.forRootAsync({ useFactory: ormConfig }),
+
+        UserModule, CommonModule],
     providers: [
         {
             provide: 'APP_INTERCEPTOR', useClass: ClassSerializerInterceptor

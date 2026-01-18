@@ -7,12 +7,30 @@ import { UserResponseDto } from "./dtos/user-response.dto";
 import { CustomExceptionFilter } from "src/common/filters/custom-exception.filter";
 import { AuthGuard } from "src/common/guards/auth.guard";
 import { Public } from "src/common/decorators/public.decorator";
+import { ConfigService } from "@nestjs/config";
 
 
+interface EnvironmentVariables {
+    NODE_ENV: string;
+    DATABASE_TYPE: string;
+    DATABASE_HOST: string;
+    DATABASE_PORT: number
+    DATABASE_USER: string
+    DATABASE_PASSWORD: string
+    DATABASE_NAME: string
+}
 //@UseFilters(CustomExceptionFilter)  use it only in user controller
 @Controller('users')
 export class UsersController {
-    constructor(private readonly userservice: UserService) { }
+    constructor(
+        private readonly ConfigService: ConfigService<EnvironmentVariables>,
+        private readonly userservice: UserService
+    ) {
+        // console.log(process.env.NODE_ENV);
+        console.log(this.ConfigService.get('NODE_ENV'));
+        // console.log(this.ConfigService.get('URL', { infer: true }));
+
+    }
     @Get()
     // @SetMetadata('IS_PUBLIC', true)
     @Public()
